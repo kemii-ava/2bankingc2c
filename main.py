@@ -14,33 +14,62 @@ def menu():
         DOB = input ("What is your Date of Birth?")
         pin = input ("Finally, please create a PIN.")
 import mysql.connector
+# balance menu where user can check there balance
+import mysql.connector
 
 def check_balance():
-    balance_name = input ("What is your first and last name")
-    balance_pin = input ("What is your PIN.")
+    # Connect to the database
+    connection = mysql.connector.connect(
+        host="127.0.0.1",
+        user="victoria",
+        password="OluwaKemi10$",
+        database="bank_db"
+    )
+    cursor = connection.cursor()
 
+    # User input
+    balance_name = input("What is your first and last name? ")
 
-connection = mysql.connector.connect(
-    host="127.0.0.1",      # Your database host (change if remote)
-    user="victoria",  # Your database username
-    password="OluwaKemi10$",  # Your database password
-    database="bank_db"  # Database name
-)
+    # Query to check balance
+    query = "SELECT name, balance FROM account WHERE name = %s"
+    cursor.execute(query, (balance_name,))
 
+    # Fetch and display result
+    result = cursor.fetchone()
+    if result:
+        print(f"Here is your balance: ${result[1]:.2f}")
+    else:
+        print("Account not found.")
 
-cursor = connection.cursor()
+    # Close connection
+    cursor.close()
+    connection.close()
 
+# call the function
+check_balance()
 
-query = "SELECT balance_name, balance_amount FROM balances WHERE balance_name = %s"
-balance_name = input("Enter your account name: ")  # Ask for user input
-cursor.execute(query, (balance_name,))
+import mysql.connector
 
+def add_deposit():
+    # Connect to the SQL database
+    connection = mysql.connector.connect(
+        host="127.0.0.1",      # Replace with your database host
+        user="victoria",       # Replace with your database username
+        password="OluwaKemi10$",  # Replace with your database password
+        database="bank_db"     # Replace with your database name
+    )
+    cursor = connection.cursor()
 
-result = cursor.fetchone()
-if result:
-    print(f"Here is your balance: {result[1]}")
-else:
-    print("Account not found.")
+   
+# deposit menu here 
+def add_deposit():
+    deposit_name = input ("What is your first and last name?")
+    deposit_pin = int(input ("What is your PIN?"))
+    global deposit
+    deposit = float(input ("How much would you like to deposit?"))
+if deposit <= 0: 
+    print("Deposit amount must be greater than 0.")
 
-cursor.close()
-connection.close()
+    print("Thank you, {deposit_name}. You have deposited {deposit:.2f}")
+    print("Thank you, please press a number from the menu if you have another businesswith us.")
+    print("If not , press 0 to Exit")
